@@ -79,11 +79,11 @@ jobs:
       - restore_cache:
           keys: [frontend_build]
       - run:
-        name: Test frontend
-        command: |
-          cd frontend
-          npm i
-          npm run test
+          name: Test frontend
+          command: |
+            cd frontend
+            npm i
+            npm run test
                 
   test-backend:
     docker:
@@ -93,10 +93,10 @@ jobs:
       - restore_cache:
           keys: [backend_build]
       - run:
-        name: Test backend
-        command: |
-          cd backend
-          npm i
+          name: Test backend
+          command: |
+            cd backend
+            npm i
           npm run test
             
   scan-frontend:
