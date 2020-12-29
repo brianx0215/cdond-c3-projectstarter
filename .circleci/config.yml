@@ -2,9 +2,11 @@ version: 2.1
 
 commands:
   destroy-environment:
-    description: Destroy back-end and front-end cloudformation stacks given a workflow ID.
+    description: Destroy backend and frontend cloudformation stacks given a workflow ID.
     parameters:
-      # Add parameter here   
+      destination:
+        description: workflow ID
+        type: string
     steps:
       - run:
           name: Destroy environments
@@ -16,11 +18,13 @@ commands:
   revert-migrations:
     description: Revert the last migration if successfully run in the current workflow.
     parameters:
-      # Add parameter here     
+      destination:
+        description: workflow ID
+        type: string   
     steps:
       - run:
           name: Revert migrations
-          # Add when this will run
+          when: on_fail
           command: |
             # Curl command here to see if there was a successful migration associated with the workflow id, store result in SUCCESS variable
             SUCCESS = 1
@@ -35,47 +39,47 @@ commands:
 jobs:
   build-frontend:
     docker:
-      - image: cimg/node:15.5.0
+      - image: cimg/node
     steps:
       - checkout
       - restore_cache:
-          keys: [frontend-build]
+          keys: [frontend_build]
       - run:
-          name: Build front-end
+          name: Build frontend
           command: |
             cd frontend
             npm i
             npm run build
       - save_cache:
           paths: [frontend/node_modules]
-          key: frontend-build
+          key: frontend_build
 
   build-backend:
     docker:
-      - image: cimg/node:15.5.0
+      - image: cimg/node
     steps:
       - checkout
       - restore_cache:
-          keys: [backend-build]
+          keys: [backend_build]
       - run:
-          name: Build back-end
+          name: Build backend
           command: |
             cd backend
             npm i
             npm run build
       - save_cache:
           paths: [backend/node_modules]
-          key: backend-build
+          key: backend_build
 
   test-frontend:
     docker:
-      cimg/node:15.5.0
+      - image: cimg/node
     steps:
       - checkout
       - restore_cache:
-          keys: [frontend-build]
+          keys: [frontend_build]
       - run:
-        name: Front-end test
+        name: Test frontend
         command: |
           cd frontend
           npm i
@@ -83,13 +87,13 @@ jobs:
                 
   test-backend:
     docker:
-      cimg/node:15.5.0
+      - image: cimg/node
     steps:
       - checkout
       - restore_cache:
-          keys: [backend-build]
+          keys: [backend_build]
       - run:
-        name: Back-end test
+        name: Test backend
         command: |
           cd backend
           npm i
@@ -97,27 +101,27 @@ jobs:
             
   scan-frontend:
     docker:
-      cimg/node:15.5.0
+      - image: cimg/node
     steps:
       - checkout
       - restore_cache:
-          keys: [frontend-build]
+          keys: [frontend_build]
       # Your job code here
 
   scan-backend:
     docker:
-      cimg/node:15.5.0
+      - image: cimg/node
     steps:
       - checkout
       - restore_cache:
-          keys: [backend-build]
+          keys: [backend_build]
       # Your job code here
 
   deploy-infrastructure:
     docker:
-      # Docker image here that supports AWS CLI
+      - image: amazon/aws-cli
     steps:
-      # Checkout code from git
+      - checkout
       - run:
           name: Ensure back-end infrastructure exists
           command: |
@@ -149,9 +153,9 @@ jobs:
 
   configure-infrastructure:
     docker:
-      # Docker image here that supports Ansible
+      - image: ansible/awx
     steps:
-      # Checkout code from git
+      - checkout
       # Add ssh keys with fingerprint
       # attach workspace
       - run:
@@ -168,9 +172,9 @@ jobs:
 
   run-migrations:
     docker:
-      # Docker image here that supports NodeJS
+      - image: cimg/node
     steps:
-      # Checkout code from git
+      - checkout
       - run:
           name: Run migrations
           command: |
@@ -185,9 +189,9 @@ jobs:
 
   deploy-frontend:
     docker:
-      # Docker image here that supports AWS CLI
+      - image: amazon/aws-cli
     steps:
-      # Checkout code from git
+      - checkout
       - run:
           name: Install dependencies
           command: |
@@ -206,9 +210,9 @@ jobs:
                     
   deploy-backend:
     docker:
-      # Docker image here that supports Ansible
+      - image: ansible/awx
     steps:
-      # Checkout code from git
+      - checkout
       # Add ssh keys with fingerprint
       # attach workspace
       - run:
@@ -223,9 +227,9 @@ jobs:
 
   smoke-test:
     docker:
-      # Lightweight Docker image 
+      - image: cimg/base 
     steps:
-      # Checkout code from git
+      - checkout
       - run:
           name: Install dependencies
           command: |
@@ -246,9 +250,9 @@ jobs:
 
   cloudfront-update:
     docker:
-      # Docker image here that supports AWS CLI
+      - image: amazon/aws-cli
     steps:
-      # Checkout code from git
+      - checkout
       - run:
           name: Install dependencies
           command: |
@@ -261,9 +265,9 @@ jobs:
 
 cleanup:
     docker:
-      # Docker image here
+      - image: cimg/base
     steps:
-      # Checkout code from git
+      - checkout
       - run:
           name: Get old stack workflow id
           command: |
