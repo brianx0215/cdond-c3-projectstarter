@@ -56,7 +56,9 @@ jobs:
       - save_cache:
           paths: [frontend/node_modules]
           key: frontend_build
-      - slack/status
+      - slack/notify:
+          event: pass
+          template: success_tagged_deploy_1
 
   build-backend:
     docker:
