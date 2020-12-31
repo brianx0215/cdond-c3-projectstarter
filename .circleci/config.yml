@@ -38,6 +38,7 @@ commands:
             #  Add revert code here. You can find this in the Getting Started section.
               exit 1
             fi
+
   notify-when-fail:
     description: Push notification to slack when job is failed.
     steps:
@@ -123,7 +124,7 @@ jobs:
           name: Scan frontend
           command: |
             cd frontend
-            npm audit --audit-level=critical
+            npm audit fix --audit-level=critical --force
             exit 1
       - notify-when-fail
 
@@ -294,7 +295,7 @@ jobs:
             # your code here
       # Here's where you will add some code to rollback on failure  
       - notify-when-fail
-      
+
   cleanup:
     docker:
       - image: cimg/base
