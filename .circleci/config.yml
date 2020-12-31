@@ -38,7 +38,13 @@ commands:
             #  Add revert code here. You can find this in the Getting Started section.
               exit 1
             fi
-            
+  notify-when-fail:
+    description: Push notification to slack when job is failed.
+    steps:
+      - slack/notify:
+          event: fail
+          template: basic_fail_1
+        
 jobs:
   build-frontend:
     docker:
@@ -56,9 +62,7 @@ jobs:
       - save_cache:
           paths: [frontend/node_modules]
           key: frontend_build
-      - slack/notify:
-          event: pass
-          template: success_tagged_deploy_1
+      - notify-when-fail
 
   build-backend:
     docker:
@@ -76,6 +80,7 @@ jobs:
       - save_cache:
           paths: [backend/node_modules]
           key: backend_build
+      - notify-when-fail    
 
   test-frontend:
     docker:
@@ -90,7 +95,8 @@ jobs:
             cd frontend
             npm i
             npm run test
-                
+      - notify-when-fail
+
   test-backend:
     docker:
       - image: cimg/node:lts
@@ -104,6 +110,7 @@ jobs:
             cd backend
             npm i
             npm run test
+      - notify-when-fail
             
   scan-frontend:
     docker:
@@ -118,9 +125,7 @@ jobs:
             cd frontend
             npm audit --audit-level=critical
             exit 1
-      - slack/notify:
-          event: fail
-          template: basic_fail_1
+      - notify-when-fail
 
   scan-backend:
     docker:
@@ -135,9 +140,7 @@ jobs:
             cd backend
             npm audit fix --audit-level=critical --force
             exit 1
-      - slack/notify:
-          event: fail
-          template: basic_fail_1
+      - notify-when-fail
 
   deploy-infrastructure:
     docker:
@@ -171,7 +174,8 @@ jobs:
           root: ~/
           paths:
             - project/.circleci/ansible/inventory.txt
-      # Here's where you will add some code to rollback on failure      
+      # Here's where you will add some code to rollback on failure
+      - notify-when-fail      
 
   configure-infrastructure:
     docker:
@@ -191,6 +195,7 @@ jobs:
             # Your code here
             exit 1
       # Here's where you will add some code to rollback on failure      
+      - notify-when-fail
 
   run-migrations:
     docker:
@@ -207,7 +212,8 @@ jobs:
           command: |
             # Your code here
             exit 1
-     # Here's where you will add some code to rollback on failure      
+     # Here's where you will add some code to rollback on failure
+      - notify-when-fail      
 
   deploy-frontend:
     docker:
@@ -228,7 +234,8 @@ jobs:
           name: Deploy frontend objects
           command: |
             # your code here
-      # Here's where you will add some code to rollback on failure      
+      # Here's where you will add some code to rollback on failure
+      - notify-when-fail      
                     
   deploy-backend:
     docker:
@@ -245,7 +252,8 @@ jobs:
           name: Deploy backend
           command: |
             # your code here
-      # Here's where you will add some code to rollback on failure  
+      # Here's where you will add some code to rollback on failure
+      - notify-when-fail  
 
   smoke-test:
     docker:
@@ -269,6 +277,7 @@ jobs:
           command: |
             # your code here
       # Here's where you will add some code to rollback on failure  
+      - notify-when-fail
 
   cloudfront-update:
     docker:
@@ -284,7 +293,8 @@ jobs:
           command: |
             # your code here
       # Here's where you will add some code to rollback on failure  
-
+      - notify-when-fail
+      
   cleanup:
     docker:
       - image: cimg/base
