@@ -56,6 +56,7 @@ jobs:
       - save_cache:
           paths: [frontend/node_modules]
           key: frontend_build
+      - slack/status
 
   build-backend:
     docker:
