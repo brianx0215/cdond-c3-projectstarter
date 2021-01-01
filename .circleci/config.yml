@@ -125,7 +125,6 @@ jobs:
           command: |
             cd frontend
             npm audit fix --audit-level=critical --force
-            exit 1
       - notify-when-fail
 
   scan-backend:
@@ -140,7 +139,6 @@ jobs:
           command: |
             cd backend
             npm audit fix --audit-level=critical --force
-            exit 1
       - notify-when-fail
 
   deploy-infrastructure:
