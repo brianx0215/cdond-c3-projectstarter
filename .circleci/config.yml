@@ -155,7 +155,7 @@ jobs:
               --stack-name udapeople-${CIRCLE_WORKFLOW_ID:0:7} \
               --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"  
       - run:
-          name: Ensure front-end infrastructure exist
+          name: Ensure front-end infrastructure exists
           command: |
             aws cloudformation deploy \
               --template-file .circleci/files/frontend.yml \
@@ -165,8 +165,15 @@ jobs:
       - run:
           name: Add back-end ip to ansible inventory
           command: |
-            # Your code here
-            exit 1
+            BACKEND_IP=`aws ec2 describe-instances \
+              --filters Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7} \
+              --query Reservations[*].Instances[*].[InstanceId] \
+              --output text`
+            echo ${BACKEND_IP} >> .circleci\ansible\inventory.txt \
+            curl -H "Content-Type: text/plain" \
+              -H "token: ${MEMSTASH_TOKEN}" \
+              --request PUT \
+              --data "${BACKEND_IP}" https://api.memstash.io/values/${CIRCLE_WORKFLOW_ID:0:7}
       - persist_to_workspace:
           root: ~/
           paths:
@@ -179,13 +186,19 @@ jobs:
       - image: ansible/awx
     steps:
       - checkout
-      # Add ssh keys with fingerprint
-      # attach workspace
+      - add_ssh_keys:
+          fingerprints:
+            - "58:13:d8:a6:51:ab:82:23:72:5a:af:ac:35:ea:97:dc:78:03:3b:f3"
+      - attach_workspace:
+          at: ~/
       - run:
           name: Install dependencies
           command: |
-            # Your code here
-            exit 1
+            apt update -y
+            apt -y install curl python3
+            curl -sL https://deb.nodesource.com/setup_15.x | sudo -E bash -
+            apt install -y nodejs
+            npm install pm2 -g
       - run:
           name: Configure server
           command: |
