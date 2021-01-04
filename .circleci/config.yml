@@ -2,6 +2,7 @@ version: 2.1
 
 orbs:
   slack: circleci/slack@4.2.0
+  aws-cli: circleci/aws-cli@1.3.1
 
 commands:
   destroy-environment:
@@ -143,7 +144,7 @@ jobs:
 
   deploy-infrastructure:
     docker:
-      - image: amazon/aws-cli
+      - image: cimg/base
     steps:
       - checkout
       - run:
@@ -231,7 +232,7 @@ jobs:
 
   deploy-frontend:
     docker:
-      - image: amazon/aws-cli
+      - image: cimg/base
     steps:
       - checkout
       - run:
@@ -295,7 +296,7 @@ jobs:
 
   cloudfront-update:
     docker:
-      - image: amazon/aws-cli
+      - image: cimg/base
     steps:
       - checkout
       - run:
