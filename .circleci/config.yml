@@ -195,9 +195,8 @@ jobs:
           name: Install dependencies
           command: |
             apt update -y
-            apt -y install curl python3
             curl -sL https://deb.nodesource.com/setup_15.x | sudo -E bash -
-            apt install -y nodejs
+            apt -y install tar gzip curl python3 nodejs
             npm install pm2 -g
       - run:
           name: Configure server
