@@ -150,8 +150,8 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            apt update -y
-            apt -y install tar gzip
+            sudo apt update -y
+            sudo apt install -y tar gzip
       - run:
           name: Ensure back-end infrastructure exists
           command: |
@@ -200,9 +200,9 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            apt update -y
+            sudo apt update -y
             curl -sL https://deb.nodesource.com/setup_15.x | sudo -E bash -
-            apt -y install tar gzip curl python3 nodejs
+            sudo apt install -y tar gzip curl python3 nodejs
             npm install pm2 -g
       - run:
           name: Configure server
