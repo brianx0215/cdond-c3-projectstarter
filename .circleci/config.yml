@@ -2,11 +2,13 @@ version: 2.1
 
 orbs:
   slack: circleci/slack@4.2.0
+  aws-cli: circleci/aws-cli@1.3.1
 
 commands:
   destroy-environment:
     description: Destroy backend and frontend cloudformation stacks given a workflow ID.
     steps:
+      - aws-cli/install
       - run:
           name: Destroy environments
           when: on_fail
