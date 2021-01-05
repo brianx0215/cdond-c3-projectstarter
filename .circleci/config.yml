@@ -6,17 +6,13 @@ orbs:
 commands:
   destroy-environment:
     description: Destroy backend and frontend cloudformation stacks given a workflow ID.
-    parameters:
-      destination:
-        description: workflow ID
-        type: string
     steps:
       - run:
           name: Destroy environments
           when: on_fail
           command: |
-            # Your code here
-            exit 1
+            aws cloudformation delete-stack --stack-name backend-${CIRCLE_WORKFLOW_ID:0:7}
+            aws cloudformation delete-stack --stack-name frontend-${CIRCLE_WORKFLOW_ID:0:7}
 
   revert-migrations:
     description: Revert the last migration if successfully run in the current workflow.
@@ -187,7 +183,8 @@ jobs:
           paths:
             - project/.circleci/ansible/inventory.txt
       # Here's where you will add some code to rollback on failure
-      - notify-when-fail      
+      - notify-when-fail
+      - destroy-environment      
 
   configure-infrastructure:
     docker:
@@ -213,6 +210,7 @@ jobs:
             exit 1
       # Here's where you will add some code to rollback on failure      
       - notify-when-fail
+      - destroy-environment  
 
   run-migrations:
     docker:
@@ -231,6 +229,7 @@ jobs:
             exit 1
      # Here's where you will add some code to rollback on failure
       - notify-when-fail      
+      - destroy-environment  
 
   deploy-frontend:
     docker:
@@ -252,7 +251,8 @@ jobs:
           command: |
             # your code here
       # Here's where you will add some code to rollback on failure
-      - notify-when-fail      
+      - notify-when-fail
+      - destroy-environment
                     
   deploy-backend:
     docker:
@@ -270,7 +270,8 @@ jobs:
           command: |
             # your code here
       # Here's where you will add some code to rollback on failure
-      - notify-when-fail  
+      - notify-when-fail
+      - destroy-environment  
 
   smoke-test:
     docker:
@@ -295,6 +296,7 @@ jobs:
             # your code here
       # Here's where you will add some code to rollback on failure  
       - notify-when-fail
+      - destroy-environment
 
   cloudfront-update:
     docker:
@@ -311,7 +313,8 @@ jobs:
             # your code here
       # Here's where you will add some code to rollback on failure  
       - notify-when-fail
-
+      - destroy-environment
+      
   cleanup:
     docker:
       - image: cimg/base:stable
