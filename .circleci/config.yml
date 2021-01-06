@@ -204,7 +204,7 @@ jobs:
             sudo apt update -y
             curl -sL https://deb.nodesource.com/setup_15.x | sudo -E bash -
             sudo apt install -y tar gzip curl python3 nodejs
-            npm install pm2 -g
+            sudo npm install pm2 -g
             sudo apt install software-properties-common
             sudo apt-add-repository --yes --update ppa:ansible/ansible
             sudo apt install ansible
