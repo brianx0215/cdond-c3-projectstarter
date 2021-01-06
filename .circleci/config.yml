@@ -190,7 +190,7 @@ jobs:
 
   configure-infrastructure:
     docker:
-      - image: ansible/awx
+      - image: cimg/base:stable
     steps:
       - checkout
       - add_ssh_keys:
@@ -203,7 +203,8 @@ jobs:
           command: |
             sudo apt update -y
             curl -sL https://deb.nodesource.com/setup_15.x | sudo -E bash -
-            sudo apt install -y tar gzip curl python3 nodejs
+            sudo apt-add-repository --yes --update ppa:ansible/ansible
+            sudo apt install -y tar gzip curl python3 nodejs software-properties-common ansible
             npm install pm2 -g
       - run:
           name: Configure server
@@ -258,7 +259,7 @@ jobs:
                     
   deploy-backend:
     docker:
-      - image: ansible/awx
+      - image: cimg/base:stable
     steps:
       - checkout
       # Add ssh keys with fingerprint
