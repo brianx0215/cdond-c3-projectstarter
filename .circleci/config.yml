@@ -313,9 +313,9 @@ jobs:
   cloudfront-update:
     docker:
       - image: cimg/base:stable
-      - aws-cli/install
     steps:
       - checkout
+      - aws-cli/install
       - run:
           name: Install dependencies
           command: |
