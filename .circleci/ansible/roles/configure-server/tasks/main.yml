@@ -1,28 +1,29 @@
-- name: Install the nodejs LTS repos
-  apt_repository:
-    repo: "deb https://deb.nodesource.com/setup_15.x {{ ansible_distribution_release }} main"
-    state: present
+- name: "update apt packages."
+  become: yes
+  apt:
     update_cache: yes
 
-- name: Install essential packages
+- name: "upgrade packages"
+  become: yes
   apt:
-    pkg:
-      - python3
-      - tar
-      - gzip
-      - nodejs
+    upgrade: yes
+
+- name: remove dependencies that are no longer required
+  become: yes
+  apt:
+    autoremove: yes
+
+- name: "install dependencies."
+  become: yes
+  apt:
+    name: ["nodejs", "npm"]
+    state: latest
+    update_cache: yes
+
+- name: "install pm2"
+  become: yes
+  npm:
+    name: pm2
+    global: yes
+    production: yes
     state: present
-
-- name: Install pm2
-  shell: npm install pm2 -g
-
-- name: Configure environment variable
-  environment:
-    ENVIRONMENT: production
-    TYPEORM_CONNECTION: postgres
-    TYPEORM_ENTITIES: ./src/modules/domain/**/*.entity.ts
-    TYPEORM_HOST: ${TYPEORM_HOST}
-    TYPEORM_PORT: ${TYPEORM_PORT}
-    TYPEORM_USERNAME: ${TYPEORM_USERNAME}
-    TYPEORM_PASSWORD: ${TYPEORM_PASSWORD}
-    TYPEORM_DATABASE: ${TYPEORM_DATABASE}
