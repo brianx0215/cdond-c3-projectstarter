@@ -23,7 +23,7 @@ commands:
           when: on_fail
           command: |
             SUCCESS=`curl -H "token: ${MEMSTASH_TOKEN}" --request GET https://api.memstash.io/values/npm_migration_${CIRCLE_WORKFLOW_ID:0:7}`
-            if(( $SUCCESS==1 )); 
+            if [[ $SUCCESS -eq 1 ]] ; 
             then
               cd ~/project/backend
               npm install
@@ -220,6 +220,7 @@ jobs:
       - run:
           name: Send migration results to memstash
           command: |
+            cat /tmp/npm_migration.log
             if [[ `grep "has been executed successfully" /tmp/npm_migration.log | wc -l` -gt 0 ]] ; then
               curl -H "Content-Type: text/plain" \
                 -H "token: ${MEMSTASH_TOKEN}" \
