@@ -190,6 +190,7 @@ jobs:
       - image: cimg/base:stable
     steps:
       - checkout
+      - aws-cli/install
       - add_ssh_keys:
           fingerprints:
             - "58:13:d8:a6:51:ab:82:23:72:5a:af:ac:35:ea:97:dc:78:03:3b:f3"
@@ -215,6 +216,7 @@ jobs:
       - image: cimg/node:lts
     steps:
       - checkout
+      - aws-cli/install
       - run:
           name: Run migrations
           command: |
@@ -243,6 +245,7 @@ jobs:
       - image: cimg/base:stable
     steps:
       - checkout
+      - aws-cli/install
       - run:
           name: Install dependencies
           command: |
@@ -266,6 +269,7 @@ jobs:
       - image: cimg/base:stable
     steps:
       - checkout
+      - aws-cli/install
       # Add ssh keys with fingerprint
       # attach workspace
       - run:
@@ -285,6 +289,7 @@ jobs:
       - image: cimg/base:stable 
     steps:
       - checkout
+      - aws-cli/install
       - run:
           name: Install dependencies
           command: |
@@ -308,6 +313,7 @@ jobs:
   cloudfront-update:
     docker:
       - image: cimg/base:stable
+      - aws-cli/install
     steps:
       - checkout
       - run:
