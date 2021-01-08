@@ -14,7 +14,7 @@
     state: present
 
 - name: Install pm2
-    shell: npm install pm2 -g
+  shell: npm install pm2 -g
 
 - name: Configure environment variable
   environment:
