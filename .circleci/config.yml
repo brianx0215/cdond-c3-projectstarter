@@ -17,10 +17,6 @@ commands:
 
   revert-migrations:
     description: Revert the last migration if successfully run in the current workflow.
-    parameters:
-      destination:
-        description: workflow ID
-        type: string   
     steps:
       - run:
           name: Revert migrations
@@ -258,7 +254,6 @@ jobs:
           name: Deploy frontend objects
           command: |
             # your code here
-      # Here's where you will add some code to rollback on failure
       - notify-when-fail
       - destroy-environment
       - revert-migrations 
@@ -269,8 +264,11 @@ jobs:
     steps:
       - checkout
       - aws-cli/install
-      # Add ssh keys with fingerprint
-      # attach workspace
+      - add_ssh_keys:
+          fingerprints:
+            - "58:13:d8:a6:51:ab:82:23:72:5a:af:ac:35:ea:97:dc:78:03:3b:f3"
+      - attach_workspace:
+          at: ~/
       - run:
           name: Install dependencies
           command: |
@@ -279,7 +277,6 @@ jobs:
           name: Deploy backend
           command: |
             # your code here
-      # Here's where you will add some code to rollback on failure
       - notify-when-fail
       - destroy-environment
       - revert-migrations   
@@ -306,7 +303,6 @@ jobs:
           name: Frontend smoke test.
           command: |
             # your code here
-      # Here's where you will add some code to rollback on failure  
       - notify-when-fail
       - destroy-environment
       - revert-migrations 
@@ -325,7 +321,6 @@ jobs:
           name: Update cloudfront distribution
           command: |
             # your code here
-      # Here's where you will add some code to rollback on failure  
       - notify-when-fail
       - destroy-environment
       - revert-migrations 
