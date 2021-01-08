@@ -218,13 +218,21 @@ jobs:
       - run:
           name: Run migrations
           command: |
-            # Your code here
-            exit 1
+            cd backend
+            npm run migrations > /tmp/npm_migration.log
       - run:
           name: Send migration results to memstash
           command: |
-            # Your code here
-            exit 1
+            if [[`grep "has been executed successfully" /tmp/npm_migration.log | wc -l` -gt 0]] ; then
+              curl -H "Content-Type: text/plain" \
+                -H "token: ${MEMSTASH_TOKEN}" \
+                --request PUT \
+                --data "1" https://api.memstash.io/values/npm_migration_${CIRCLE_WORKFLOW_ID:0:7}
+              echo "Migration Complete"
+            else
+              echo "Migration Failed"
+              exit 1
+            fi
      # Here's where you will add some code to rollback on failure
       - notify-when-fail      
       - destroy-environment  
