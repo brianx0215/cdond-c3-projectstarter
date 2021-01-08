@@ -180,9 +180,10 @@ jobs:
       - persist_to_workspace:
           root: ~/
           paths:
-            - UdaPeople/.circleci/ansible/inventory.txt
+            - project/.circleci/ansible/inventory.txt
       # Here's where you will add some code to rollback on failure
       - notify-when-fail   
+      - destroy-environment 
 
   configure-infrastructure:
     docker:
@@ -204,7 +205,7 @@ jobs:
       - run:
           name: Configure server
           command: |
-            cd ~/UdaPeople/.circleci/ansible
+            cd ~/project/.circleci/ansible
             ansible-playbook configure-server.yml --inventory-file=inventory.txt
       # Here's where you will add some code to rollback on failure      
       - notify-when-fail
