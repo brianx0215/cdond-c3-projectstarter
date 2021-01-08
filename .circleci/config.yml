@@ -53,7 +53,7 @@ jobs:
           name: Build frontend
           command: |
             cd frontend
-            npm i
+            npm install
             npm run build
       - save_cache:
           paths: [frontend/node_modules]
@@ -205,9 +205,9 @@ jobs:
           name: Configure server
           command: |
             cd ~/project/.circleci/ansible
-            ansible-playbook configure-server.yml --inventory-file=inventory.txt
-      # Here's where you will add some code to rollback on failure      
+            ansible-playbook configure-server.yml --inventory-file=inventory.txt    
       - notify-when-fail
+      - destroy-environment 
 
   run-migrations:
     docker:
@@ -234,9 +234,9 @@ jobs:
               echo "Migration Failed"
               exit 1
             fi
-     # Here's where you will add some code to rollback on failure
       - notify-when-fail      
-      - destroy-environment  
+      - destroy-environment
+      - revert-migrations  
 
   deploy-frontend:
     docker:
@@ -261,6 +261,7 @@ jobs:
       # Here's where you will add some code to rollback on failure
       - notify-when-fail
       - destroy-environment
+      - revert-migrations 
                     
   deploy-backend:
     docker:
@@ -280,7 +281,8 @@ jobs:
             # your code here
       # Here's where you will add some code to rollback on failure
       - notify-when-fail
-      - destroy-environment  
+      - destroy-environment
+      - revert-migrations   
 
   smoke-test:
     docker:
@@ -307,6 +309,7 @@ jobs:
       # Here's where you will add some code to rollback on failure  
       - notify-when-fail
       - destroy-environment
+      - revert-migrations 
 
   cloudfront-update:
     docker:
@@ -325,6 +328,7 @@ jobs:
       # Here's where you will add some code to rollback on failure  
       - notify-when-fail
       - destroy-environment
+      - revert-migrations 
       
   cleanup:
     docker:
