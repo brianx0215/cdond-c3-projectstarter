@@ -163,14 +163,14 @@ jobs:
           name: Add back-end ip to ansible inventory
           command: |
             BACKEND_IP=`aws ec2 describe-instances \
-              --filters Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7} \
+              --filters Name=tag:Name,Values=udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7} \
               --query Reservations[*].Instances[*].[InstanceId] \
               --output text`
             echo ${BACKEND_IP} >> .circleci\ansible\inventory.txt \
             curl -H "Content-Type: text/plain" \
               -H "token: ${MEMSTASH_TOKEN}" \
               --request PUT \
-              --data "${BACKEND_IP}" https://api.memstash.io/values/${CIRCLE_WORKFLOW_ID:0:7}
+              --data "${BACKEND_IP}" https://api.memstash.io/values/udapeople-backend-IP-${CIRCLE_WORKFLOW_ID:0:7}
       - persist_to_workspace:
           root: ~/
           paths:
@@ -181,7 +181,7 @@ jobs:
 
   configure-infrastructure:
     docker:
-      - image: cimg/base:stable
+      - image: cimg/node:lts
     steps:
       - checkout
       - aws-cli/install
@@ -195,7 +195,7 @@ jobs:
           command: |
             sudo apt update -y
             curl -sL https://deb.nodesource.com/setup_15.x | sudo -E bash -
-            sudo apt install -y tar gzip curl python3 nodejs ansible
+            sudo apt install -y tar gzip ansible
             sudo npm install pm2 -g
       - run:
           name: Configure server
@@ -234,24 +234,33 @@ jobs:
 
   deploy-frontend:
     docker:
-      - image: cimg/base:stable
+      - image: cimg/node:lts
     steps:
       - checkout
       - aws-cli/install
       - run:
           name: Install dependencies
           command: |
-            # your code here
+            sudo apt update -y
+            curl -sL https://deb.nodesource.com/setup_15.x | sudo -E bash -
+            sudo apt install -y tar gzip ansible
       - run:
           name: Get backend url
           command: |
-            # your code here
+            BACKEND_IP=`curl -H "token: ${MEMSTASH_TOKEN}" --request GET https://api.memstash.io/values/udapeople-backend-IP-${CIRCLE_WORKFLOW_ID:0:7}`
             export API_URL="http://${BACKEND_IP}:3030"
             echo "${API_URL}"
       - run:
+          name: Build frontend
+          command: |
+            cd frontend
+            npm i
+            npm run build
+      - run:
           name: Deploy frontend objects
           command: |
-            # your code here
+            cd frontend
+            aws s3 cp ./dist s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --recursive
       - notify-when-fail
       - destroy-environment
       - revert-migrations 
