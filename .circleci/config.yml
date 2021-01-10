@@ -227,10 +227,6 @@ jobs:
                 --request PUT \
                 --data "1" https://api.memstash.io/values/npm_migration_${CIRCLE_WORKFLOW_ID:0:7}
               echo "Migration Complete"
-            else
-              echo "Migration Failed"
-              cat /tmp/npm_migration.log
-              exit 1
             fi
       - notify-when-fail      
       - destroy-environment
