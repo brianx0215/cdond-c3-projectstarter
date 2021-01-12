@@ -1,15 +1,11 @@
 - name: "deploy backend"
-  become_user: ubuntu
   copy:
-    src: ~/project/backend/dist/*
-    dest: ~/udapeople/
-    owner: ubuntu
-    group: ubuntu
-    mode: '0644'
+    src: ~/project/backend/dist/
+    dest: /etc/udapeople/
+    remote_src: yes
 
 - name: "run backend"
-  become_user: ubuntu
   shell: |
-    cd ~/udapeople/
+    cd /etc/udapeople/
     npm i    
     pm2 start main.js --update-env
