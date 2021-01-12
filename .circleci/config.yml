@@ -167,7 +167,8 @@ jobs:
               --filters Name=tag:Name,Values=udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7} \
               --query Reservations[*].Instances[*].[InstanceId] \
               --output text`
-            echo ${BACKEND_IP} >> .circleci\ansible\inventory.txt \
+            echo ${BACKEND_IP} >> .circleci\ansible\inventory.txt
+            echo ${BACKEND_IP}
             curl -H "Content-Type: text/plain" \
               -H "token: ${MEMSTASH_TOKEN}" \
               --request PUT \
@@ -220,7 +221,6 @@ jobs:
       - run:
           name: Send migration results to memstash
           command: |
-            cat /tmp/npm_migration.log
             if [[ `grep "has been executed successfully" /tmp/npm_migration.log | wc -l` -gt 0 ]] ; then
               curl -H "Content-Type: text/plain" \
                 -H "token: ${MEMSTASH_TOKEN}" \
