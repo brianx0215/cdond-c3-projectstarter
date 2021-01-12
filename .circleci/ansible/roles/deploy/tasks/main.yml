@@ -1,0 +1,15 @@
+- name: "deploy backend"
+  become_user: ubuntu
+  copy:
+    src: ../../backend/app.tar.gz
+    dest: ~/udapeople/
+    owner: ubuntu
+    group: ubuntu
+    mode: '0644'
+
+- name: "run backend"
+  become_user: ubuntu
+  shell: |
+    cd ~/udapeople/
+    npm i    
+    pm2 start main.js --update-env

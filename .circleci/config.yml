@@ -176,7 +176,6 @@ jobs:
           root: ~/
           paths:
             - project/.circleci/ansible/inventory.txt
-      # Here's where you will add some code to rollback on failure
       - notify-when-fail   
       - destroy-environment 
 
@@ -280,11 +279,14 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            # your code here
+            sudo apt update -y
+            curl -sL https://deb.nodesource.com/setup_15.x | sudo -E bash -
+            sudo apt install -y tar gzip ansible
       - run:
           name: Deploy backend
           command: |
-            # your code here
+            cd ~/project/.circleci/ansible
+            ansible-playbook deploy-backend.yml --inventory-file=inventory.txt 
       - notify-when-fail
       - destroy-environment
       - revert-migrations   
@@ -298,7 +300,7 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            # your code here
+            exit 1
       - run:
           name: Get backend url
           command: |
