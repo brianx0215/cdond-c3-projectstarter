@@ -255,6 +255,7 @@ jobs:
             cd frontend
             npm i
             npm run build
+            cp -r ./dist/ /etc/udapeople
       - run:
           name: Deploy frontend objects
           command: |

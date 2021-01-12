@@ -1,6 +1,6 @@
 - name: "deploy backend"
   copy:
-    src: ~/project/backend/dist/
+    src: /etc/udapeople/
     dest: /etc/udapeople/
     remote_src: yes
 
