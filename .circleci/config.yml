@@ -167,8 +167,7 @@ jobs:
               --filters Name=tag:Name,Values=udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7} \
               --query Reservations[*].Instances[*].[PrivateDnsName] \
               --output text`
-            echo ${BACKEND_IP} >> .circleci\ansible\inventory.txt
-            echo ${BACKEND_IP}
+            echo ${BACKEND_IP} >> .circleci/ansible/inventory.txt
             curl -H "Content-Type: text/plain" \
               -H "token: ${MEMSTASH_TOKEN}" \
               --request PUT \
