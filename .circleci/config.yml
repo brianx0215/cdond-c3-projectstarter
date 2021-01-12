@@ -282,6 +282,12 @@ jobs:
             curl -sL https://deb.nodesource.com/setup_15.x | sudo -E bash -
             sudo apt install -y tar gzip ansible
       - run:
+          name: Build backend
+          command: |
+            cd backend
+            npm i
+            npm run build
+      - run:
           name: Deploy backend
           command: |
             cd ~/project/.circleci/ansible

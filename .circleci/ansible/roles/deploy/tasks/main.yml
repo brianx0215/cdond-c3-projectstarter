@@ -1,7 +1,7 @@
 - name: "deploy backend"
   become_user: ubuntu
   copy:
-    src: ../../backend/app.tar.gz
+    src: ../../backend/dist/*
     dest: ~/udapeople/
     owner: ubuntu
     group: ubuntu
