@@ -202,7 +202,7 @@ jobs:
           name: Configure server
           command: |
             cd ~/project/.circleci/ansible
-            ansible-playbook configure-server.yml --inventory-file=inventory.txt    
+            ansible-playbook configure-server.yml --inventory-file inventory.txt --limit web    
       - notify-when-fail
       - destroy-environment 
 
@@ -286,7 +286,7 @@ jobs:
           name: Deploy backend
           command: |
             cd ~/project/.circleci/ansible
-            ansible-playbook deploy-backend.yml --inventory-file=inventory.txt 
+            ansible-playbook deploy-backend.yml --inventory-file inventory.txt --limit web
       - notify-when-fail
       - destroy-environment
       - revert-migrations   
