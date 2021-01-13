@@ -1,15 +1,15 @@
 - name: "Create directory"
-  become: yes
+  become_user: ubuntu
   shell: mkdir -p ~/udapeople/
 
 - name: "deploy backend"
-  become: yes
+  become_user: ubuntu
   unarchive:
     src: /etc/udapeople/app.tar.gz
     dest: ~/udapeople/
 
 - name: "run backend"
-  become: yes
+  become_user: ubuntu
   shell: |
     cd ~/udapeople/
     npm i    
