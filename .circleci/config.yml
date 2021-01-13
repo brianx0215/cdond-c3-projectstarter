@@ -289,6 +289,7 @@ jobs:
             npm run build
             tar -czvf ./app.tar.gz ./dist
             sudo cp ./app.tar.gz /etc/udapeople
+            sudo chmod 644 /etc/udapeople/app.tar.gz
       - run:
           name: Deploy backend
           command: |
