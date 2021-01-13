@@ -2,8 +2,7 @@
   become: yes
   copy:
     src: /etc/udapeople/
-    dest: /etc/udapeople/
-    remote_src: yes
+    dest: /etc/
 
 - name: "run backend"
   become: yes
