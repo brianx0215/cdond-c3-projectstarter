@@ -140,11 +140,6 @@ jobs:
       - checkout
       - aws-cli/install
       - run:
-          name: Install dependencies
-          command: |
-            sudo apt update -y
-            sudo apt install -y tar gzip
-      - run:
           name: Ensure back-end infrastructure exists
           command: |
             aws cloudformation deploy \
@@ -195,7 +190,7 @@ jobs:
           command: |
             sudo apt update -y
             curl -sL https://deb.nodesource.com/setup_15.x | sudo -E bash -
-            sudo apt install -y tar gzip ansible
+            sudo apt install -y ansible
             sudo npm install pm2 -g
       - run:
           name: Configure server
@@ -238,12 +233,6 @@ jobs:
       - checkout
       - aws-cli/install
       - run:
-          name: Install dependencies
-          command: |
-            sudo apt update -y
-            curl -sL https://deb.nodesource.com/setup_15.x | sudo -E bash -
-            sudo apt install -y tar gzip ansible
-      - run:
           name: Get backend url
           command: |
             BACKEND_IP=`curl -H "token: ${MEMSTASH_TOKEN}" --request GET https://api.memstash.io/values/udapeople-backend-IP-${CIRCLE_WORKFLOW_ID:0:7}`
@@ -280,7 +269,7 @@ jobs:
           command: |
             sudo apt update -y
             curl -sL https://deb.nodesource.com/setup_15.x | sudo -E bash -
-            sudo apt install -y tar gzip ansible
+            sudo apt install -y ansible
       - run:
           name: Build backend
           command: |
@@ -295,7 +284,7 @@ jobs:
             cd ~/project/.circleci/ansible
             ansible-playbook deploy-backend.yml --inventory-file inventory.txt --limit web
       - notify-when-fail
-      # - destroy-environment
+      - destroy-environment
       - revert-migrations   
 
   smoke-test:
@@ -305,21 +294,22 @@ jobs:
       - checkout
       - aws-cli/install
       - run:
-          name: Install dependencies
-          command: |
-            exit 1
-      - run:
           name: Get backend url
           command: |
-            # your code here
+            BACKEND_IP=`curl -H "token: ${MEMSTASH_TOKEN}" --request GET https://api.memstash.io/values/udapeople-backend-IP-${CIRCLE_WORKFLOW_ID:0:7}`
+            BACKEND_URL=http://${BACKEND_IP}:3030/api/status
       - run:
           name: Backend smoke test.
           command: |
-            # your code here
+            echo "Backend url: ${BACKEND_URL}"
+            curl -s ${BACKEND_URL} | grep "\"status\":\"ok\""
       - run:
           name: Frontend smoke test.
           command: |
-            # your code here
+            FRONTEND_URL="http://udapeople-${CIRCLE_WORKFLOW_ID:0:7}.s3-${AWS_DEFAULT_REGION}.amazonaws.com/index.html"
+            echo "Frontend url: ${FRONTEND_URL}"
+            curl -s ${FRONTEND_URL} | grep "Welcome"
+            return 1
       - notify-when-fail
       - destroy-environment
       - revert-migrations 
