@@ -308,7 +308,7 @@ jobs:
             curl -s ${FRONTEND_URL} | grep "Welcome"
             return 1
       - notify-when-fail
-      - destroy-environment
+      # - destroy-environment
       - revert-migrations 
 
   cloudfront-update:
