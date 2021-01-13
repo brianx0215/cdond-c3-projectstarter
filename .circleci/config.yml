@@ -287,9 +287,8 @@ jobs:
             cd backend
             npm i
             npm run build
-            tar -czvf ./app.tar.gz ./dist
-            sudo cp ./app.tar.gz /etc/udapeople
-            sudo chmod 644 /etc/udapeople/app.tar.gz
+            sudo tar -czvf /etc/app.tar.gz ./dist
+            sudo chmod 644 /etc/app.tar.gz
       - run:
           name: Deploy backend
           command: |

@@ -5,7 +5,7 @@
 - name: "deploy backend"
   become_user: ubuntu
   unarchive:
-    src: /etc/udapeople/app.tar.gz
+    src: /etc/app.tar.gz
     dest: ~/udapeople/
 
 - name: "run backend"
