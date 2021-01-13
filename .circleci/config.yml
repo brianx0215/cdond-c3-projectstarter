@@ -295,7 +295,7 @@ jobs:
             cd ~/project/.circleci/ansible
             ansible-playbook deploy-backend.yml --inventory-file inventory.txt --limit web
       - notify-when-fail
-      - destroy-environment
+      # - destroy-environment
       - revert-migrations   
 
   smoke-test:
