@@ -287,7 +287,6 @@ jobs:
             cd backend
             npm i
             npm run build
-            cp -r ./dist/ /etc/udapeople
       - run:
           name: Deploy backend
           command: |

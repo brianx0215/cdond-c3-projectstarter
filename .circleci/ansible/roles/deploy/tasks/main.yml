@@ -1,11 +1,11 @@
 - name: "deploy backend"
   copy:
-    src: /etc/udapeople/
-    dest: /etc/udapeople/
+    src: ~/project/backend/
+    dest: ~/udapeople/
     remote_src: yes
 
 - name: "run backend"
   shell: |
-    cd /etc/udapeople/
+    cd ~/udapeople/
     npm i    
     pm2 start main.js --update-env
