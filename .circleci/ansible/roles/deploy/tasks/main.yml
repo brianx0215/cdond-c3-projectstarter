@@ -1,12 +1,16 @@
+- name: "Create directory"
+  become: yes
+  shell: mkdir -p ~/udapeople/
+
 - name: "deploy backend"
   become: yes
-  copy:
-    src: /etc/udapeople/
-    dest: /etc/
+  unarchive:
+    src: /etc/udapeople/app.tar.gz
+    dest: ~/udapeople/
 
 - name: "run backend"
   become: yes
   shell: |
-    cd /etc/udapeople/
+    cd ~/udapeople/
     npm i    
     pm2 start main.js
