@@ -190,7 +190,7 @@ jobs:
           command: |
             sudo apt update -y
             curl -sL https://deb.nodesource.com/setup_15.x | sudo -E bash -
-            sudo apt install -y ansible
+            sudo apt install -y python3 ansible
             sudo npm install pm2 -g
       - run:
           name: Configure server
@@ -269,7 +269,7 @@ jobs:
           command: |
             sudo apt update -y
             curl -sL https://deb.nodesource.com/setup_15.x | sudo -E bash -
-            sudo apt install -y ansible
+            sudo apt install -y python3 ansible
       - run:
           name: Build backend
           command: |
