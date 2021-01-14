@@ -1,6 +1,8 @@
 - name: "Create directory"
   become_user: ubuntu
-  shell: mkdir -p ~/udapeople/
+  file:
+    path: ~/udapeople/
+    state: directory
 
 - name: "deploy backend"
   become_user: ubuntu
