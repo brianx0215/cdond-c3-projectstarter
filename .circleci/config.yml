@@ -280,6 +280,11 @@ jobs:
             sudo tar -C ./dist/ -czvf /etc/app.tar.gz ./
             sudo chmod 644 /etc/app.tar.gz
       - run:
+          name: Export environment variable
+          command: |
+            echo ENVIRONMENT=production > "backend/.env"
+            printenv | grep "TYPEORM" >> "backend/.env"
+      - run:
           name: Deploy backend
           command: |
             cd ~/project/.circleci/ansible

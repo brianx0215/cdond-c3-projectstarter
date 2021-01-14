@@ -1,6 +1,5 @@
 ANSIBLE_PYTHON_INTERPRETER: /usr/bin/python3
 ENVIRONMENT: "{{ lookup('env','ENVIRONMENT') }}"
-CIRCLE_WORKFLOW_ID: "{{ lookup('env','CIRCLE_WORKFLOW_ID') }}"
 TYPEORM_CONNECTION: "{{ lookup('env','TYPEORM_CONNECTION') }}"
 TYPEORM_ENTITIES: "{{ lookup('env','TYPEORM_ENTITIES') }}"
 TYPEORM_HOST: "{{ lookup('env','TYPEORM_HOST') }}"
