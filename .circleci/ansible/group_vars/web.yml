@@ -1,6 +1,5 @@
-ansible_python_interpreter: /usr/bin/python3
-ansible_host_key_checking: false
-ansible_stdout_callback: yaml
+ANSIBLE_PYTHON_INTERPRETER: /usr/bin/python3
+ANSIBLE_HOST_KEY_CHECKING: false
 ENVIRONMENT: "{{ lookup('env','ENVIRONMENT') }}"
 CIRCLE_WORKFLOW_ID: "{{ lookup('env','CIRCLE_WORKFLOW_ID') }}"
 TYPEORM_CONNECTION: "{{ lookup('env','TYPEORM_CONNECTION') }}"
