@@ -276,7 +276,7 @@ jobs:
             cd backend
             npm i
             npm run build
-            sudo tar -C backend -czvf -czvf /etc/app.tar.gz ./
+            sudo tar -czvf /etc/app.tar.gz ./
             sudo chmod 644 /etc/app.tar.gz
       - run:
           name: Deploy backend
