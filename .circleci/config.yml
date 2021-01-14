@@ -280,13 +280,11 @@ jobs:
             sudo tar -C ./dist/ -czvf /etc/app.tar.gz ./
             sudo chmod 644 /etc/app.tar.gz
       - run:
-          name: Export environment variable
-          command: |
-            echo ENVIRONMENT=production > "backend/.env"
-            printenv | grep "TYPEORM" >> "backend/.env"
-      - run:
           name: Deploy backend
           command: |
+            echo ENVIRONMENT=production > ~/project/backend/.env
+            printenv | grep "TYPEORM" >> ~/project/backend/.env
+            cat ~/project/backend/.env
             cd ~/project/.circleci/ansible
             ansible-playbook deploy-backend.yml --inventory-file inventory.txt --limit web
       - notify-when-fail
