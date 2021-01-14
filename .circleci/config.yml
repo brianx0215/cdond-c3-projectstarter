@@ -276,6 +276,7 @@ jobs:
             cd backend
             npm i
             npm run build
+            cp package* ./dist
             sudo tar -C ./dist/ -czvf /etc/app.tar.gz ./
             sudo chmod 644 /etc/app.tar.gz
       - run:
