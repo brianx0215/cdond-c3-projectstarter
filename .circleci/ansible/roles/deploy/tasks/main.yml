@@ -15,4 +15,4 @@
   shell: |
     cd ~/udapeople/
     npm i    
-    pm2 start main.js
+    pm2 start npm -- run start
