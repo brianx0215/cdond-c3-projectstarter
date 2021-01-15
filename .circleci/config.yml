@@ -189,7 +189,6 @@ jobs:
           name: Install dependencies
           command: |
             sudo apt update -y
-            curl -sL https://deb.nodesource.com/setup_15.x | sudo -E bash -
             sudo apt install -y python2 python3 ansible
             sudo npm install pm2 -g
       - run:
@@ -268,7 +267,6 @@ jobs:
           name: Install dependencies
           command: |
             sudo apt update -y
-            curl -sL https://deb.nodesource.com/setup_15.x | sudo -E bash -
             sudo apt install -y python2 python3 ansible
       - run:
           name: Build backend
