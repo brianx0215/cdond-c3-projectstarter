@@ -189,7 +189,7 @@ jobs:
           name: Install dependencies
           command: |
             sudo apt update -y
-            sudo apt install -y python2.7 python3 ansible
+            sudo apt install -y python3 ansible
             sudo npm install pm2 -g
       - run:
           name: Configure server
@@ -267,7 +267,7 @@ jobs:
           name: Install dependencies
           command: |
             sudo apt update -y
-            sudo apt install -y python2.7 python3 ansible
+            sudo apt install -y python3 ansible
       - run:
           name: Build backend
           command: |
