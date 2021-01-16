@@ -334,6 +334,7 @@ jobs:
       - image: cimg/base:stable
     steps:
       - checkout
+      - aws-cli/install
       - run:
           name: Get old stack workflow id
           command: |
