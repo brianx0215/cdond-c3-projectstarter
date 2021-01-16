@@ -292,7 +292,6 @@ jobs:
     docker:
       - image: cimg/base:stable 
     steps:
-      - checkout
       - aws-cli/install
       - run:
           name: Backend smoke test.
@@ -315,7 +314,6 @@ jobs:
     docker:
       - image: cimg/base:stable
     steps:
-      - checkout
       - aws-cli/install
       - run:
           name: Update cloudfront distribution
@@ -333,7 +331,6 @@ jobs:
     docker:
       - image: cimg/base:stable
     steps:
-      - checkout
       - aws-cli/install
       - run:
           name: Get old stack workflow id
