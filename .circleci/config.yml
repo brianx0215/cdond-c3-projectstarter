@@ -307,7 +307,6 @@ jobs:
             FRONTEND_URL="http://udapeople-${CIRCLE_WORKFLOW_ID:0:7}.s3-${AWS_DEFAULT_REGION}.amazonaws.com/index.html"
             echo "Frontend url: ${FRONTEND_URL}"
             curl -s ${FRONTEND_URL} | grep "Welcome"
-            exit 1
       - notify-when-fail
       - destroy-environment
       - revert-migrations 
@@ -338,7 +337,9 @@ jobs:
       - run:
           name: Get old stack workflow id
           command: |
-            export OldWorkflowID=$(curl -H "token: ${MEMSTASH_TOKEN}" --request GET https://api.memstash.io/values/OldWorkflow-ID-${CIRCLE_WORKFLOW_ID:0:7})
+            export OldWorkflowID=$(aws cloudformation \
+              list-exports --query "Exports[?Name==\`WorkflowID\`].Value" \
+              --no-paginate --output text)
             echo "Old workflow ID: ${OldWorkflowID}"
             export STACKS=$(aws cloudformation list-stacks \
               --query "StackSummaries[*].StackName" \
