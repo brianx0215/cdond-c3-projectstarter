@@ -314,6 +314,7 @@ jobs:
     docker:
       - image: cimg/base:stable
     steps:
+      - checkout
       - aws-cli/install
       - run:
           name: Update cloudfront distribution
@@ -354,6 +355,7 @@ jobs:
               aws cloudformation delete-stack --stack-name backend-${OldWorkflowID}
               aws cloudformation delete-stack --stack-name frontend-${OldWorkflowID}
             fi
+      - notify-when-fail
 
 workflows:
   default:
